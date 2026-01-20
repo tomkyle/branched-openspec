@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install validation tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y python3-tomli markdownlint
+
+      - name: Validate TOML inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/validate.py toml
+
+      - name: Validate Markdown inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/validate.py markdown
+
+      - name: Run install targets
+        run: make install
+
+      - name: Run uninstall targets
+        run: make uninstall
