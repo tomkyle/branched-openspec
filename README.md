@@ -20,9 +20,19 @@ Open these files in your editor to review or adapt the instructions before wirin
 
 ## Installation
 
-Run `make install` to set up both the Codex prompt and the Gemini extension when their CLIs are available. — You may also install them separately using `make codex` and `make gemini`.
+**Gemini CLI**  allows direct installation from GitHub repositories, see their [docs](https://geminicli.com/docs/extensions/#installing-an-extension). Run this command to install the Gemini extension from this repository: 
 
 ```sh
+$ gemini extensions install https://github.com/tomkyle/branched-openspec
+$ gemini extensions install https://github.com/tomkyle/branched-openspec --auto-update
+```
+
+**Codex CLI**
+Clone the repository locally and use the provided _Makefile_ to install the Codex prompt and Gemini extension. Run `make install` to set up both the Codex prompt and the Gemini extension when their CLIs are available. — You may also install them separately using `make codex` and `make gemini`.
+
+```sh
+$ git clone https://github.com/tomkyle/branched-openspec
+$ cd branched-openspec
 $ make install
 ```
 
