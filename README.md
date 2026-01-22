@@ -2,32 +2,37 @@
 
 **This repository ships a custom prompt for [Codex](https://openai.com/codex/) and a matching [Gemini CLI](https://geminicli.com/) extension that drive the [OpenSpec](https://openspec.dev/) workflow inside an isolated Git work branch while enforcing [Conventional Commits](https://www.conventionalcommits.org) after each phase.**
 
-Using Conventional Commits at every step produces a consistent change log, simplifies auditing, and keeps the main branches clean. Teams can review or adjust the work branch between phases without losing visibility into either manual edits or the automated OpenSpec run. 
+## Rationale
+
+Traceability and Compliance are critical when applying automated changes to codebases.
+Using Conventional Commits after every OpenSpec phase and user refinement produces a consistent change log, simplifies auditing, and keeps the main branches clean. Teams can review or adjust the work branch between phases without losing visibility into either manual edits or the automated OpenSpec run. 
 
 
 ## Overview
 - Spins up a feature branch for every OpenSpec proposal so experiments stay isolated
 - Walks through the *proposal → apply → archive* flow with [Conventional Commits](https://www.conventionalcommits.org) after each stage
+- Leaves room for your refinement or review commits between phases
 - Merges successful work back into the base branch and removes the temporary branch when the cycle ends
 
 ## Prompt files
 
-- `prompts/branched-openspec.md` for Codex
-- `commands/branched-openspec.toml` for Gemini
+- [prompts/branched-openspec.md](./prompts/branched-openspec.md) — Codex Custom Command 
+- [commands/branched-openspec.toml](./commands/branched-openspec.toml) — Gemini CLI extension
 
 Open these files in your editor to review or adapt the instructions before wiring it into your automation.
 
 
 ## Installation
 
-**Gemini CLI**  allows direct installation from GitHub repositories, see their [docs](https://geminicli.com/docs/extensions/#installing-an-extension). Run this command to install the Gemini extension from this repository: 
+**Gemini CLI**  
+allows direct installation from GitHub repositories, see their [docs](https://geminicli.com/docs/extensions/#installing-an-extension). Run this command to install the Gemini extension from this repository: 
 
 ```sh
 $ gemini extensions install https://github.com/tomkyle/branched-openspec
 $ gemini extensions install https://github.com/tomkyle/branched-openspec --auto-update
 ```
 
-**Codex CLI**
+**Codex CLI**   
 Clone the repository locally and use the provided _Makefile_ to install the Codex prompt and Gemini extension. Run `make install` to set up both the Codex prompt and the Gemini extension when their CLIs are available. — You may also install them separately using `make codex` and `make gemini`.
 
 ```sh
