@@ -1,6 +1,6 @@
 # OpenSpec in Git Work Branch
 
-**This repository ships a custom prompt for [Codex](https://openai.com/codex/) and a matching [Gemini CLI](https://geminicli.com/) extension that drive the [OpenSpec](https://openspec.dev/) workflow inside an isolated Git work branch while enforcing [Conventional Commits](https://www.conventionalcommits.org) after each phase.**
+**This repository ships custom prompts for [Codex](https://openai.com/codex/)/[OpenCode](https://opencode.ai/) and a matching [Gemini CLI](https://geminicli.com/) extension that drive the [OpenSpec](https://openspec.dev/) workflow inside an isolated Git work branch while enforcing [Conventional Commits](https://www.conventionalcommits.org) after each phase.**
 
 ## Rationale
 
@@ -16,7 +16,7 @@ Using Conventional Commits after every OpenSpec phase and user refinement produc
 
 ## Prompt files
 
-- [prompts/branched-openspec.md](./prompts/branched-openspec.md) — Codex Custom Command 
+- [prompts/branched-openspec.md](./prompts/branched-openspec.md) — Codex and Opencode Custom Command 
 - [commands/branched-openspec.toml](./commands/branched-openspec.toml) — Gemini CLI extension
 
 Open these files in your editor to review or adapt the instructions before wiring it into your automation.
@@ -32,8 +32,8 @@ $ gemini extensions install https://github.com/tomkyle/branched-openspec
 $ gemini extensions install https://github.com/tomkyle/branched-openspec --auto-update
 ```
 
-**Codex CLI**   
-Clone the repository locally and use the provided _Makefile_ to install the Codex prompt and Gemini extension. Run `make install` to set up both the Codex prompt and the Gemini extension when their CLIs are available. — You may also install them separately using `make codex` and `make gemini`.
+**Codex CLI and OpenCode**   
+Clone the repository locally and use the provided _Makefile_ to install the prompts for Codex and Opencode as well as the Gemini extension. Run `make install` to set up all of them when their CLIs are available. — You may also install them separately using `make codex` and `make opencode`.
 
 ```sh
 $ git clone https://github.com/tomkyle/branched-openspec
@@ -52,7 +52,7 @@ $ make uninstall
 
 ## Usage
 
-Open Codex or Gemini CLI and run the `/prompts:branched-openspec` prompt with the project requirements. Just typing `/branched-openspec ...` in the prompt selector should also work.
+Open Codex, OpenCode, or Gemini CLI and run the `/prompts:branched-openspec` prompt with the project requirements. Just typing `/branched-openspec ...` in the prompt selector should also work.
 
 ```text
 /branched-openspec "Add hello-world feature"

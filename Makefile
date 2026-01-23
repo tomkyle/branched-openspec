@@ -21,6 +21,10 @@ CODEX_PROMPTS_DIR := $(abspath prompts)
 CODEX_TARGET_DIR := $(HOME)/.codex/prompts
 CODEX_PROMPT_FILES := $(wildcard $(CODEX_PROMPTS_DIR)/*)
 
+OPENCODE_PROMPTS_DIR := $(abspath prompts)
+OPENCODE_TARGET_DIR := $(HOME)/.config/opencode/commands/
+OPENCODE_PROMPT_FILES := $(wildcard $(OPENCODE_PROMPTS_DIR)/*)
+
 .DEFAULT_GOAL := help
 
 .PHONY: install uninstall help
@@ -37,6 +41,31 @@ help:
 	@echo -e "  $(GREEN)make help$(RESET)      Show this overview"
 	@echo ""
 
+
+# ---------------------------------------------------------------------------
+# opencode
+# Ensures the target directory exists and symlinks each prompt
+# into Opencode's commands directory.
+# ---------------------------------------------------------------------------
+opencode:
+	@if command -v opencode >/dev/null 2>&1; then \
+		echo -e "$(BLUE)Installing custom prompt for Opencode...$(RESET)"; \
+		if [ -z "$(OPENCODE_PROMPT_FILES)" ]; then \
+			echo -e "$(YELLOW)No prompt files found in $(OPENCODE_PROMPTS_DIR).$(RESET)"; \
+			exit 0; \
+		fi; \
+		mkdir -p "$(OPENCODE_TARGET_DIR)"; \
+		for src in $(OPENCODE_PROMPT_FILES); do \
+			PROMPT_NAME=$$(basename "$$src"); \
+			dest="$(OPENCODE_TARGET_DIR)/$$PROMPT_NAME"; \
+			ln -snf "$$src" "$$dest"; \
+			echo -e "  $(GREEN)✓$(RESET) $$PROMPT_NAME"; \
+		done; \
+		echo -e "$(GREEN)Done.$(RESET)"; \
+		echo ""; \
+	else \
+		echo -e "$(YELLOW)Opencode CLI not found. Skipping Opencode prompt installation.$(RESET)"; \
+	fi
 
 # ---------------------------------------------------------------------------
 # codex
@@ -93,6 +122,34 @@ uninstall:
 		echo -e "$(GREEN)Done.$(RESET)"; \
 	else \
 		echo -e "$(YELLOW)Gemini CLI not found. Skipping Gemini uninstall.$(RESET)"; \
+	fi
+
+	@if command -v opencode >/dev/null 2>&1; then \
+		echo -e "$(BLUE)Removing prompt for Opencode...$(RESET)"; \
+		if [ -z "$(OPENCODE_PROMPT_FILES)" ]; then \
+			echo -e "$(YELLOW)No prompt files defined locally.$(RESET)"; \
+			exit 0; \
+		fi; \
+		removed=0; \
+		for src in $(OPENCODE_PROMPT_FILES); do \
+			PROMPT_NAME=$$(basename "$$src"); \
+			dest="$(OPENCODE_TARGET_DIR)/$$PROMPT_NAME"; \
+			if [ -L "$$dest" ]; then \
+				target=$$(readlink "$$dest"); \
+				if [ "$$src" = "$$target" ]; then \
+					rm "$$dest"; \
+					echo -e "  $(GREEN)✓$(RESET) $$PROMPT_NAME"; \
+					removed=$$((removed + 1)); \
+				fi; \
+			fi; \
+		done; \
+		if [ $$removed -eq 0 ]; then \
+			echo -e "$(YELLOW)No matching symlinks to remove.$(RESET)"; \
+		else \
+			echo -e "$(GREEN)Done.$(RESET)"; \
+		fi; \
+	else \
+		echo -e "$(YELLOW)Opencode CLI not found. Skipping Opencode uninstall.$(RESET)"; \
 	fi
 
 	@if command -v codex >/dev/null 2>&1; then \
