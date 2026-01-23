@@ -11,12 +11,13 @@ argument-hint: ARGUMENTS="[requirements]"
    branch before touching files.
 1. Run `/openspec-proposal`, `/openspec-apply`, and `/openspec-archive`
    sequentially, guiding the user through each stage.
+1. After each phase, pause for confirmation or user refinement.
 1. After archiving, offer to merge back into the base branch, delete the work
    branch locally, and skip any push to origin.
 
 # Git Commands
 
-Autonomous commands are limited to:
+Allowed Autonomous commands:
 
 - `git checkout -b <work-branch>`
 - `git add <directory>`
