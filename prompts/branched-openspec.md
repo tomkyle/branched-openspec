@@ -1,8 +1,6 @@
 ---
-description: >-
-  Run the OpenSpec workflow in a dedicated Git work branch while guiding the
-  user through each stage.
-argument-hint: ARGUMENTS="[requirements]"
+description: Run OpenSpec workflow in isolated Git work branch with Conventional Commits
+argument-hint: ARGUMENTS="<requirements>"
 ---
 
 # Your Role
@@ -42,8 +40,8 @@ You must follow these rules strictly:
 ## 1. Branching
 
 - Always branch from `HEAD` before starting work.
-- Name the branch after the task or referenced user story (e.g., `feature-...`,
-  `fix-...`).
+- Name the branch after the task or referenced user story
+  (e.g., `feature-...`, `fix-...`).
 - When `/userstories/` is involved, read the file as the baseline but never edit
   or move it.
 - Direct commits to the base branch are forbidden; use the work branch.
@@ -96,8 +94,8 @@ commands manually and list them.
   `chore(spec): archive [feature-name]` with a short summary plus
   `OpenSpec phase: archive`. Offer to merge and delete the work branch via
   `git checkout [base] && \
-   git merge -m "chore(spec): merge [work]" --no-ff [work] && \
-   git branch -d [work]`.
+  git merge -m "chore(spec): merge [work]" --no-ff [work] && \
+  git branch -d [work]`.
 
 ## 4. Test Gate
 

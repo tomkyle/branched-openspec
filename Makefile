@@ -27,11 +27,12 @@ OPENCODE_PROMPT_FILES := $(wildcard $(OPENCODE_PROMPTS_DIR)/*)
 
 .DEFAULT_GOAL := help
 
-.PHONY: install uninstall help
+.PHONY: opencode codex gemini install uninstall build help
 
 # ---------------------------------------------------------------------------
 # help
 # Prints a concise, colorized overview of available Make targets.
+# This is the default target when running 'make' without arguments.
 # ---------------------------------------------------------------------------
 help:
 	@echo -e "$(BLUE)$(REPO_NAME)$(RESET)"
@@ -44,8 +45,11 @@ help:
 
 # ---------------------------------------------------------------------------
 # opencode
-# Ensures the target directory exists and symlinks each prompt
-# into Opencode's commands directory.
+# Installs prompts for OpenCode CLI by creating symlinks.
+# - Checks if OpenCode CLI is installed
+# - Creates ~/.config/opencode/commands/ if needed
+# - Symlinks all files from prompts/ into OpenCode's commands directory
+# - Skips gracefully if OpenCode CLI is not found
 # ---------------------------------------------------------------------------
 opencode:
 	@if command -v opencode >/dev/null 2>&1; then \
@@ -69,8 +73,11 @@ opencode:
 
 # ---------------------------------------------------------------------------
 # codex
-# Ensures the target directory exists and symlinks each prompt
-# into Codex's prompts directory.
+# Installs prompts for Codex CLI by creating symlinks.
+# - Checks if Codex CLI is installed
+# - Creates ~/.codex/prompts/ if needed
+# - Symlinks all files from prompts/ into Codex's prompts directory
+# - Skips gracefully if Codex CLI is not found
 # ---------------------------------------------------------------------------
 codex:
 	@if command -v codex >/dev/null 2>&1; then \
@@ -94,8 +101,11 @@ codex:
 
 # ---------------------------------------------------------------------------
 # gemini
-# Ensures the target directory exists and symlinks each prompt
-# into Codex's prompts directory.
+# Installs this repository as a Gemini CLI extension.
+# - Checks if Gemini CLI is installed
+# - Runs 'gemini extensions install .' to install from current directory
+# - Uses gemini-extension.json manifest for extension metadata
+# - Skips gracefully if Gemini CLI is not found
 # ---------------------------------------------------------------------------
 gemini:
 	@if command -v gemini >/dev/null 2>&1; then \
@@ -108,12 +118,22 @@ gemini:
 	fi
 
 
+# ---------------------------------------------------------------------------
+# install
+# Convenience target that runs both codex and gemini installation.
+# Use this to set up prompts for all supported CLIs at once.
+# ---------------------------------------------------------------------------
 install: codex gemini
 
 
 # ---------------------------------------------------------------------------
 # uninstall
-# Removes symlinks in the target directory that point to local prompt files.
+# Removes all installed prompts and extensions.
+# - Uninstalls Gemini extension using 'gemini extensions uninstall'
+# - Removes OpenCode symlinks that point to this repo's prompts
+# - Removes Codex symlinks that point to this repo's prompts
+# - Only removes symlinks that actually target this repository
+# - Skips any CLI that is not installed
 # ---------------------------------------------------------------------------
 uninstall:
 	@if command -v gemini >/dev/null 2>&1; then \
@@ -179,3 +199,17 @@ uninstall:
 	else \
 		echo -e "$(YELLOW)Codex CLI not found. Skipping Codex uninstall.$(RESET)"; \
 	fi
+
+
+# ---------------------------------------------------------------------------
+# build
+# Generates distribution files from source YAML.
+# - Reads source files from src/*.yaml
+# - Generates prompts/*.md files with YAML frontmatter
+# - Generates commands/*.toml files for Gemini CLI
+# - Uses Node.js build script (scripts/build.js)
+# - Creates output directories if they don't exist
+# ---------------------------------------------------------------------------
+
+build:
+	@./scripts/build.js

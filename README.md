@@ -129,6 +129,35 @@ Output will look similar to this:
 
 
 
+## Development
+
+The source of truth for the prompts lives in `src/*.yaml` files. The build script generates the distribution files in `prompts/` and `commands/` from these source files.
+
+**Install dependencies:**
+
+```sh
+$ pnpm install
+```
+
+**Build the prompt files:**
+The build script reads `src/*.yaml` and generates both Markdown prompts (`prompts/*.md`) and TOML commands (`commands/*.toml`):
+
+```sh
+$ npm run build
+# or
+$ make build
+# or
+$ ./scripts/build.js
+```
+
+**Watch mode:**
+Automatically rebuilds prompt files whenever source YAML files in `src/` change:
+
+```sh
+$ npm run watch
+```
+
+
 ## Mileage will vary
 
 Codex and Gemini receive a checklist of allowed Git operations and should respect it, but the agents can still deviate due to sandbox permissions or other environmental factors. Tuning sandbox permissions or adding guard rails may help, yet those adjustments live outside this repository.
