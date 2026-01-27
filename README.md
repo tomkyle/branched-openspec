@@ -5,7 +5,7 @@
 ## Rationale
 
 Traceability and Compliance are critical when applying automated changes to codebases.
-Using Conventional Commits after every OpenSpec phase and user refinement produces a consistent change log, simplifies auditing, and keeps the main branches clean. Teams can review or adjust the work branch between phases without losing visibility into either manual edits or the automated OpenSpec run. 
+Using Conventional Commits after every OpenSpec phase and user refinement produces a consistent change log, simplifies auditing, and keeps the main branches clean. Teams can review or adjust the work branch between phases without losing visibility into either manual edits or the automated OpenSpec run.
 
 
 ## Overview
@@ -14,9 +14,14 @@ Using Conventional Commits after every OpenSpec phase and user refinement produc
 - Leaves room for your refinement or review commits between phases
 - Merges successful work back into the base branch and removes the temporary branch when the cycle ends
 
+## Requirements
+
+- [OpenSpec](https://openspec.dev/)-compatible project with existing specifications and tasks
+- Installed OpenSpec automation in Codex/OpenCode, Gemini CLI, or OpenCode CLI
+
 ## Prompt files
 
-- [prompts/branched-openspec.md](./prompts/branched-openspec.md) — Codex and Opencode Custom Command 
+- [prompts/branched-openspec.md](./prompts/branched-openspec.md) — Codex and Opencode Custom Command
 - [commands/branched-openspec.toml](./commands/branched-openspec.toml) — Gemini CLI extension
 
 Open these files in your editor to review or adapt the instructions before wiring it into your automation.
@@ -24,15 +29,15 @@ Open these files in your editor to review or adapt the instructions before wirin
 
 ## Installation
 
-**Gemini CLI**  
-allows direct installation from GitHub repositories, see their [docs](https://geminicli.com/docs/extensions/#installing-an-extension). Run this command to install the Gemini extension from this repository: 
+**Gemini CLI**
+allows direct installation from GitHub repositories, see their [docs](https://geminicli.com/docs/extensions/#installing-an-extension). Run this command to install the Gemini extension from this repository:
 
 ```sh
 $ gemini extensions install https://github.com/tomkyle/branched-openspec
 $ gemini extensions install https://github.com/tomkyle/branched-openspec --auto-update
 ```
 
-**Codex CLI and OpenCode**   
+**Codex CLI and OpenCode**
 Clone the repository locally and use the provided _Makefile_ to install the prompts for Codex and Opencode as well as the Gemini extension. Run `make install` to set up all of them when their CLIs are available. — You may also install them separately using `make codex` and `make opencode`.
 
 ```sh
@@ -41,7 +46,7 @@ $ cd branched-openspec
 $ make install
 ```
 
-**Uninstallation:**  
+**Uninstallation:**
 Use `make uninstall` to remove the Gemini extension and Codex extensions. Each step runs only when its CLI is available and falls back to a skip message otherwise.
 
 ```sh
@@ -81,47 +86,47 @@ Output will look similar to this:
  commit 879ca0dfa804d2adc42cfca184be9d9639b82ad5
   Author: tomkyle <user@example.com>
   Date:   Wed Jan 21 19:39:48 2026 +0100
-   
+
       chore(spec): propose hello-command
-      
+
       - add proposal, tasks, and hello-command spec delta
-      
+
       OpenSpec phase: proposal
 
 
   commit 48b50b5e10bcf258b4049b39e303a611804a79d2
   Author: tomkyle <user@example.com>
   Date:   Wed Jan 21 19:46:04 2026 +0100
-   
+
       feat(cli): implement hello command
-      
+
       - add hello command definition and implementation
       - cover greetings in integration and functional tests
       - regenerate CLI and docs
       - note E2E suite absence in tasks
-      
+
       OpenSpec phase: apply
-   
+
 
   commit aae81cb7288709d03a63f2329991b6771a240426
   Author: tomkyle <user@example.com>
   Date:   Wed Jan 21 19:47:23 2026 +0100
-   
+
       chore(spec): archive hello-command
-      
+
       - archive add-hello-command and update hello-command spec
-      
+
       OpenSpec phase: archive
-   
+
 
   commit d7f44df014e301cc2bac421d11273f7c45996f3c (HEAD -> main)
   Merge:  aab12429 d312e09
   Author: tomkyle <user@example.com>
   Date:   Wed Jan 21 19:48:29 2026 +0100
-   
+
       chore(spec): merge feature-hello-command
 ```
-	  
+
 
 
 ## Mileage will vary
