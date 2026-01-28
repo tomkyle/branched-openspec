@@ -137,7 +137,11 @@ The source of truth for the prompts lives in `src/*.yaml` files. The build scrip
 
 ```sh
 $ pnpm install
+# or
+$ npm install
 ```
+
+Both `npm` and `pnpm` work interchangeably with the npm scripts in this project.
 
 **Build the prompt files:**
 The build script reads `src/*.yaml` and generates both Markdown prompts (`prompts/*.md`) and TOML commands (`commands/*.toml`):
@@ -151,10 +155,61 @@ $ ./scripts/build.js
 ```
 
 **Watch mode:**
-Automatically rebuilds prompt files whenever source YAML files in `src/` change:
+Automatically rebuilds prompt files and runs linters when source files change:
 
 ```sh
 $ npm run watch
+```
+
+This runs parallel watchers for:
+- `src/**/*.yaml` → rebuilds prompts and commands
+- `commands/**/*.toml` → validates TOML files
+- `prompts/*.md` → lints Markdown files
+
+## Testing
+
+### Linting the extension/custom prompt
+
+The repository includes automated linting to ensure the generated extension and custom prompt files meet quality standards. Linting validates both TOML command files and Markdown prompt files.
+
+**Run all linters:**
+
+```bash
+$ npm run lint
+```
+
+This executes both TOML and Markdown validation:
+- TOML syntax in `commands/*.toml` files, ensuring the Gemini extension configuration is parseable
+- Markdown formatting in `prompts/*.md` files, checking for consistent heading styles, proper structure, and handling YAML frontmatter. The Markdown linter uses rules configured in `.markdownlint.json`
+
+**Lint specific file types:**
+
+```bash
+# TOML only - validates Gemini extension commands
+$ npm run lint:toml
+
+# Markdown only - validates Codex/OpenCode prompts
+$ npm run lint:md
+```
+
+### Local CI with `act`
+Install [nektos/act](https://nektosact.com/) to run the GitHub Actions workflows locally.
+Head over to their [docs](https://nektosact.com/installation/index.html) or just use Homebrew:
+
+```bash
+$ brew install act
+```
+
+`act` simulates the GitHub CI environment by executing workflows defined in `.github/workflows/` inside Docker containers, allowing you to test CI pipelines before pushing to GitHub. The `.actrc` configuration uses a pre-built Docker image to speed up execution.
+
+The CI workflow validates TOML and Markdown files, then tests the Makefile install/uninstall targets. To run the CI workflow locally:
+
+```bash
+$ act push
+# or
+$ act -j validate
+# or specify a workflow explicitly
+$ act -W .github/workflows/ci.yml
 ```
 
 

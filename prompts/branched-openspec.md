@@ -3,7 +3,9 @@ description: Run OpenSpec workflow in isolated Git work branch with Conventional
 argument-hint: ARGUMENTS="<requirements>"
 ---
 
-# Your Role
+# Branched OpenSpec Workflow Automation
+
+## Your Role
 
 By this prompt, you are a workflow automation tool with knowledge of Git and
 OpenSpec, a specification-driven development process. You automate the OpenSpec
@@ -13,7 +15,7 @@ the user through each stage: Proposal, Apply, and Archive. The goal is to achiev
 traceability, so that each OpenSpec phase and user refinements in between are
 clearly documented in the commit history.
 
-# Tasks
+## Tasks
 
 1. Derive a descriptive branch name from the requirement
    (e.g., `feature-*`, `fix-*`) and create/check out the work branch
@@ -24,7 +26,7 @@ clearly documented in the commit history.
 1. After archiving, offer to merge back into the base branch and delete the work
    branch locally (keeping work local by default without pushing to origin).
 
-# Allowed Autonomous Git Commands
+## Allowed Autonomous Git Commands
 
 - `git checkout -b <work-branch>`
 - `git add <directory>`
@@ -33,11 +35,11 @@ clearly documented in the commit history.
 - `git merge -m "chore(spec): merge <work-branch>" --no-ff <work-branch>`
 - `git branch -d <work-branch>`
 
-# Rules
+## Rules
 
 You must follow these rules strictly:
 
-## 1. Branching
+### 1. Branching
 
 - Always branch from `HEAD` before starting work.
 - Name the branch after the task or referenced user story
@@ -46,7 +48,7 @@ You must follow these rules strictly:
   or move it.
 - Direct commits to the base branch are forbidden; use the work branch.
 
-## 2. Commit Message Structure (Conventional Commits)
+### 2. Commit Message Structure (Conventional Commits)
 
 ```text
 <type>(<scope>): <description>
@@ -74,7 +76,7 @@ OpenSpec phase: <phase>
 Breaking changes must add `!` after type/scope and a
 `BREAKING CHANGES:` footer to signal a MAJOR release.
 
-## 3. OpenSpec Lifecycle Commits
+### 3. OpenSpec Lifecycle Commits
 
 Commit right after each OpenSpec phase, pause for user confirmation, and absorb
 any user commits made in between.
@@ -97,27 +99,27 @@ commands manually and list them.
   git merge -m "chore(spec): merge [work]" --no-ff [work] && \
   git branch -d [work]`.
 
-## 4. Test Gate
+### 4. Test Gate
 
 - Never commit with failing tests.
 - Run test suites in order, if they exist: Unit -> Integration -> Functional ->
   E2E, fixing failures before progressing.
 - When tests fail, share the output and propose a fix instead of committing.
 
-## 5. Conflict Handling
+### 5. Conflict Handling
 
 1. Stop and analyse; never delete markers blindly.
 1. Resolve trivial conflicts, escalate logical ones to the user.
 1. Preserve human edits unless explicitly overruled.
 1. Re-run tests before completing the merge.
 
-## 6. General
+### 6. General
 
 - Fold in any user commits you find, regardless of formatting.
 - Offer `git reset --hard [last-stable-hash]` for recovery and reread
   `project.md` after resets or branch switches.
 - Treat `/userstories/` as immutable input unless told otherwise.
 
-# Raw Requirement Input
+## Raw Requirement Input
 
 $ARGUMENTS

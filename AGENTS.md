@@ -8,12 +8,18 @@
 - `Makefile` provides build and install/uninstall helpers for Codex, OpenCode, and Gemini CLIs.
 - `gemini-extension.json` is the Gemini extension manifest.
 - `package.json` manages Node.js dependencies and npm scripts.
-- `.mdlrc` and `mdl_style.rb` configure the markdown linter for CI validation.
+- `.markdownlint.json` configures the markdown linter for CI validation.
 
 ## Build, Test, and Development Commands
 - `pnpm install` or `npm install` installs Node.js dependencies (js-yaml, chokidar-cli, etc.).
 - `npm run build` or `make build` or `./scripts/build.js` generates prompts/*.md and commands/*.toml from src/*.yaml.
 - `npm run watch` runs in watch mode, automatically rebuilding when src/*.yaml files change.
+- `npm run watch:src` rebuilds when src/**/*.yaml changes.
+- `npm run watch:toml` validates commands/**/*.toml on change.
+- `npm run watch:md` lints prompts/*.md on change.
+- `npm run lint` runs all lint checks (TOML parse validation + Markdown linting).
+- `npm run lint:toml` validates TOML in commands/*.toml via scripts/validate-toml.js.
+- `npm run lint:md` lints prompts/*.md with markdownlint.
 - `make help` shows available Makefile targets with descriptions.
 - `make codex` symlinks prompt files into `~/.codex/prompts` (requires `codex` CLI).
 - `make opencode` symlinks prompt files into `~/.config/opencode/commands/` (requires `opencode` CLI).
@@ -30,8 +36,10 @@
 - Follow JSDoc conventions in `scripts/build.js` for function documentation.
 
 ## Testing Guidelines
-- CI workflow validates TOML and Markdown files using `python3-tomli` and `markdownlint` (mdl).
-- Markdown linting rules are configured in `mdl_style.rb` to handle YAML frontmatter and long lines.
+- CI workflow runs `npm run lint`, then exercises `make install` and `make uninstall`.
+- TOML linting uses `scripts/validate-toml.js` with `@iarna/toml` to ensure commands/*.toml parse.
+- Markdown linting uses `markdownlint-cli` with `.markdownlint.json` rules on prompts/*.md.
+- Markdown linting rules are configured in `.markdownlint.json` to handle YAML frontmatter and long lines.
 - Run `npm run build` before committing to ensure generated files are up-to-date.
 - Validate changes by running `make build` and `make install` to ensure CLIs accept the generated files.
 
